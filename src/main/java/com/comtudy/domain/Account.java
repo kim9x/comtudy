@@ -1,6 +1,8 @@
 package com.comtudy.domain;
 
+
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -61,4 +63,9 @@ public class Account {
 	private boolean studyUpdateByEmail;
 	
 	private boolean studyUpdateByWeb;
+
+	public void generateEmailCheckToken() {
+		this.emailCheckToken = UUID.randomUUID().toString();
+		
+	}
 }
