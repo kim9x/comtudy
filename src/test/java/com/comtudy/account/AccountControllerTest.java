@@ -1,5 +1,8 @@
 package com.comtudy.account;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.any;
@@ -21,8 +24,13 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.comtudy.domain.Account;
+
+import lombok.extern.slf4j.Slf4j;
+
 @SpringBootTest
 @AutoConfigureMockMvc
+@Slf4j
 class AccountControllerTest {
 
 	@Autowired 
@@ -68,8 +76,29 @@ class AccountControllerTest {
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/"));
 		
-		assertTrue(accountRepository.existsByEmail("taeju@email.com"));
+		Account account = accountRepository.findByEmail("taeju@email.com");
+		assertNotNull(account);
+		//	assertNotNull(account); 과 같은 테스트가 되어서 주석 처리
+//		assertTrue(accountRepository.existsByEmail("taeju@email.com"));
+		assertNotEquals(account.getPassword(), "12345678");
 		then(javaMailSender).should().send(any(SimpleMailMessage.class));
+	}
+	
+	@DisplayName("테스트")
+	@Test
+	void test() {
+		String vrfTaskStaDay = "today";
+		String prodGrpStatCd = "006.002";
+		log.info("start");
+		
+		if (vrfTaskStaDay != null  && !"006.001".contains(prodGrpStatCd)
+				&& !"006.002".contains(prodGrpStatCd)) {
+			log.info("return grp");
+			
+		}
+		
+		log.info("end");
+		
 	}
 
 }
