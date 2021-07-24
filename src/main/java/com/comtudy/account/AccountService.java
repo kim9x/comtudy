@@ -6,6 +6,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.comtudy.domain.Account;
 
@@ -19,6 +20,7 @@ public class AccountService {
 	private final JavaMailSender javaMailSender;
 	private final PasswordEncoder passwordEncoder;
 	
+	@Transactional
 	public void processNewAccount(@Valid SignUpForm signUpForm) {
 		Account newAccount = saveNewAccount(signUpForm);
 		newAccount.generateEmailCheckToken();
@@ -36,7 +38,6 @@ public class AccountService {
 				.studyUpdateByWeb(true)
 				.build();
 		Account newAccount = accountRepository.save(account);
-		newAccount.generateEmailCheckToken();
 		return newAccount;
 	}
 
