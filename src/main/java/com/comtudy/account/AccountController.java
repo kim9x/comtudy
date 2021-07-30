@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
@@ -78,8 +79,7 @@ public class AccountController {
 			return view;
 		}
 		
-		account.setEmailVerified(true);
-		account.setJoinedAt(LocalDateTime.now());
+		account.completeSignUp();
 		model.addAttribute("numberOfUser", accountRepository.count());
 		model.addAttribute("nickname", account.getNickname());
 		
