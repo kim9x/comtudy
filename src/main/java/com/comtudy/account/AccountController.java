@@ -1,14 +1,8 @@
 package com.comtudy.account;
 
-import java.time.LocalDateTime;
-
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
@@ -17,7 +11,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.comtudy.ConsoleMailSender;
 import com.comtudy.domain.Account;
 
 import lombok.RequiredArgsConstructor;
@@ -59,7 +52,8 @@ public class AccountController {
 			return "account/sign-up";
 		} */
 		
-		accountService.processNewAccount(signUpForm);
+		Account account = accountService.processNewAccount(signUpForm);
+		accountService.login(account);
 		
 		// TODO 회원 가입 처리
 		return "redirect:/";
@@ -74,7 +68,8 @@ public class AccountController {
 			return view;
 		}
 		
-		if ( !account.getEmailCheckToken().equals(token) ) {
+//		if ( !account.getEmailCheckToken().equals(token) ) {
+		if ( !account.isValidToken(token) ) {
 			model.addAttribute("error", "wrong.token");
 			return view;
 		}
