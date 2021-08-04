@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments.html :: head">
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head"></head>
 <body class="bg-light">
-	<div th:replace="fragments.html :: main-nav"></div>
-	<div class="container">
+    <div th:replace="fragments.html :: main-nav"></div>
+
+    <div class="container">
         <div class="py-5 text-center">
             <h2>계정 만들기</h2>
         </div>
         <div class="row justify-content-center">
-            <form class="needs-validation col-sm-6" th:action="@{/sign-up}" th:object="${signUpForm}" method="post" novalidate>
+            <form class="needs-validation col-sm-6" action="#"
+                  th:action="@{/sign-up}" th:object="${signUpForm}" method="post" novalidate>
                 <div class="form-group">
                     <label for="nickname">닉네임</label>
                     <input id="nickname" type="text" th:field="*{nickname}" class="form-control"
@@ -53,30 +54,28 @@
             </form>
         </div>
 
-		<div th:replace="fragments.html :: footer"></div>
+        <div class="fragments.html :: footer"></div>
     </div>
+    <script type="application/javascript">
+        (function () {
+            'use strict';
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script type="application/javascript" th:fragment="form-validation">
-    (function () {
-        'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
 
-        window.addEventListener('load', function () {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-
-            // Loop over them and prevent submission
-            Array.prototype.filter.call(forms, function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        }, false)
-    }())
-</script>
+                // Loop over them and prevent submission
+                Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+            }, false)
+        }())
+    </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-package com.comtudy;
+package com.comtudy.mail;
 
 import java.io.InputStream;
 
