@@ -1,24 +1,35 @@
 package com.comtudy.settings;
 
+import org.hibernate.validator.constraints.Length;
+
 import com.comtudy.domain.Account;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Profile {
+	
+	@Length(max = 35)
+	private String bio;
 
-  private String bio;
+	@Length(max = 50)
+	private String url;
 
-  private String url;
+	@Length(max = 50)
+	private String occupation;
 
-  private String occupation;
+	@Length(max = 50)
+	private String location;
+	
+	private String profileImage;
 
-  private String location;
-
-  public Profile(Account account) {
-      this.bio = account.getBio();
-      this.url = account.getUrl();
-      this.occupation = account.getOccupation();
-      this.location = account.getLocation();
-  }
+	public Profile(Account account) {
+		this.bio = account.getBio();
+		this.url = account.getUrl();
+		this.occupation = account.getOccupation();
+		this.location = account.getLocation();
+		this.profileImage = account.getProfileImage();
+	}
 }

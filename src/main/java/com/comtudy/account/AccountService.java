@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.comtudy.domain.Account;
+import com.comtudy.settings.Profile;
 
 import lombok.RequiredArgsConstructor;
 
@@ -97,5 +98,15 @@ public class AccountService implements UserDetailsService {
 		account.completeSignUp();
 		login(account);
 	}
+
+    public void updateProfile(Account account, Profile profile) {
+        account.setUrl(profile.getUrl());
+        account.setOccupation(profile.getOccupation());
+        account.setLocation(profile.getLocation());
+        account.setBio(profile.getBio());
+        // TODO 프로필 이미지
+        accountRepository.save(account);
+        // TODO 문제가 하나 더 남았습니다.
+    }
 
 }

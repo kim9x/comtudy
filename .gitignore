@@ -42,3 +42,4 @@ config
 .gradle/**
 gradlew*
 gradle/**
+node_modules/
