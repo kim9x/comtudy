@@ -1,7 +1,9 @@
-package com.comtudy.settings;
+package com.comtudy.settings.validator;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+
+import com.comtudy.settings.form.PasswordForm;
 
 public class PasswordFormValidator implements Validator {
 

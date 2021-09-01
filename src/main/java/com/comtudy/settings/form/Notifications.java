@@ -1,4 +1,4 @@
-package com.comtudy.settings;
+package com.comtudy.settings.form;
 
 import com.comtudy.domain.Account;
 

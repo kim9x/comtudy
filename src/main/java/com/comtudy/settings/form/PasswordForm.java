@@ -1,4 +1,4 @@
-package com.comtudy.settings;
+package com.comtudy.settings.form;
 
 import org.hibernate.validator.constraints.Length;
 
