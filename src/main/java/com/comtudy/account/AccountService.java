@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.comtudy.domain.Account;
+import com.comtudy.settings.Notifications;
 import com.comtudy.settings.Profile;
 
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class AccountService implements UserDetailsService {
 				.password(passwordEncoder.encode(signUpForm.getPassword())) // TODO encoding 해야함.
 				.studyCreatedByWeb(true)
 				.studyEnrollmentResultByWeb(true)
-				.studyUpdateByWeb(true)
+				.studyUpdatedByWeb(true)
 				.build();
 		Account newAccount = accountRepository.save(account);
 		return newAccount;
@@ -113,5 +114,15 @@ public class AccountService implements UserDetailsService {
 		account.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account);
 	}
+	
+	public void updateNotifications(Account account, Notifications notifications) {
+        account.setStudyCreatedByWeb(notifications.isStudyCreatedByWeb());
+        account.setStudyCreatedByEmail(notifications.isStudyCreatedByEmail());
+        account.setStudyUpdatedByWeb(notifications.isStudyUpdatedByWeb());
+        account.setStudyUpdatedByEmail(notifications.isStudyUpdatedByEmail());
+        account.setStudyEnrollmentResultByEmail(notifications.isStudyEnrollmentResultByEmail());
+        account.setStudyEnrollmentResultByWeb(notifications.isStudyEnrollmentResultByWeb());
+        accountRepository.save(account);
+    }
 
 }
