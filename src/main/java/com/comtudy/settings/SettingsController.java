@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.comtudy.account.AccountService;
-import com.comtudy.account.CurrentUser;
+import com.comtudy.account.CurrentAccount;
 import com.comtudy.domain.Account;
 import com.comtudy.domain.Tag;
 import com.comtudy.settings.form.NicknameForm;
@@ -69,7 +69,7 @@ public class SettingsController {
     }
 	
     @GetMapping(SETTINGS_PROFILE_URL)
-    public String updateProfileForm(@CurrentUser Account account, Model model) {
+    public String updateProfileForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(account, Profile.class));
         
@@ -77,7 +77,7 @@ public class SettingsController {
     }
     
     @PostMapping(SETTINGS_PROFILE_URL)
-    public String updateProfile(@CurrentUser Account account, @Valid Profile profile, Errors errors,
+    public String updateProfile(@CurrentAccount Account account, @Valid Profile profile, Errors errors,
                                 Model model, RedirectAttributes attributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
@@ -90,14 +90,14 @@ public class SettingsController {
     }
     
     @GetMapping(SETTINGS_PASSWORD_URL)
-    public String updatePasswordForm(@CurrentUser Account account, Model model) {
+    public String updatePasswordForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(new PasswordForm());
         return SETTINGS_PASSWORD_VIEW_NAME;
     }
 
     @PostMapping(SETTINGS_PASSWORD_URL)
-    public String updatePassword(@CurrentUser Account account, @Valid PasswordForm passwordForm, Errors errors,
+    public String updatePassword(@CurrentAccount Account account, @Valid PasswordForm passwordForm, Errors errors,
                                  Model model, RedirectAttributes attributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
@@ -110,14 +110,14 @@ public class SettingsController {
     }
     
     @GetMapping(SETTINGS_NOTIFICATIONS_URL)
-    public String updateNotificationsForm(@CurrentUser Account account, Model model) {
+    public String updateNotificationsForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(account, Notifications.class));
         return SETTINGS_NOTIFICATIONS_VIEW_NAME;
     }
 
     @PostMapping(SETTINGS_NOTIFICATIONS_URL)
-    public String updateNotifications(@CurrentUser Account account, @Valid Notifications notifications, Errors errors,
+    public String updateNotifications(@CurrentAccount Account account, @Valid Notifications notifications, Errors errors,
                                       Model model, RedirectAttributes attributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
@@ -130,7 +130,7 @@ public class SettingsController {
     }
     
     @GetMapping(SETTINGS_TAGS_URL)
-    public String updateTags(@CurrentUser Account account, Model model) throws JsonProcessingException {
+    public String updateTags(@CurrentAccount Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
         
         Set<Tag> tags = accountService.getTags(account);
@@ -144,7 +144,7 @@ public class SettingsController {
 
     @PostMapping(SETTINGS_TAGS_URL + "/add")
     @ResponseBody
-    public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+    public ResponseEntity addTag(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
 
         Tag tag = tagRepository.findByTitle(title);
@@ -159,7 +159,7 @@ public class SettingsController {
     
     @PostMapping(SETTINGS_TAGS_URL + "/remove")
     @ResponseBody
-    public ResponseEntity removeTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+    public ResponseEntity removeTag(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
         Tag tag = tagRepository.findByTitle(title);
         if (tag == null) {
@@ -171,14 +171,14 @@ public class SettingsController {
     }
     
     @GetMapping(SETTINGS_ACCOUNT_URL)
-    public String updateAccountForm(@CurrentUser Account account, Model model) {
+    public String updateAccountForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(account, NicknameForm.class));
         return SETTINGS_ACCOUNT_VIEW_NAME;
     }
 
     @PostMapping(SETTINGS_ACCOUNT_URL)
-    public String updateAccount(@CurrentUser Account account, @Valid NicknameForm nicknameForm, Errors errors,
+    public String updateAccount(@CurrentAccount Account account, @Valid NicknameForm nicknameForm, Errors errors,
                                 Model model, RedirectAttributes attributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
