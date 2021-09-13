@@ -54,10 +54,20 @@ public class AccountService implements UserDetailsService {
 
 
 	public void sendSignUpConfirmEmail(Account newAccount) {
+		/*
+		 * SimpleMailMessage mailMessage = new SimpleMailMessage();
+		 * mailMessage.setSubject("스터디올래, 회원 가입 인증");
+		 * mailMessage.setText("/check-email-token?token=" +
+		 * newAccount.getEmailCheckToken() + "&email=" + newAccount.getEmail());
+		 * javaMailSender.send(mailMessage);
+		 */
+		
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setSubject("스터디올래, 회원 가입 인증");
-		mailMessage.setText("/check-email-token?token=" + newAccount.getEmailCheckToken() + "&email=" + newAccount.getEmail());		
-		javaMailSender.send(mailMessage);
+        mailMessage.setTo(newAccount.getEmail());
+        mailMessage.setSubject("스터디올래, 회원 가입 인증");
+        mailMessage.setText("/check-email-token?token=" + newAccount.getEmailCheckToken() +
+                "&email=" + newAccount.getEmail());
+        javaMailSender.send(mailMessage);
 	}
 
 	public void login(Account account) {
