@@ -6,4 +6,6 @@ import com.comtudy.domain.Zone;
 
 public interface ZoneRepository extends JpaRepository<Zone, Long> {
 
+	Zone findByCityAndProvince(String cityName, String provinceName);
+
 }

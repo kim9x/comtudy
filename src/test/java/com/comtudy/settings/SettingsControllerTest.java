@@ -1,7 +1,17 @@
 package com.comtudy.settings;
 
-import static com.comtudy.settings.SettingsController.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.comtudy.settings.SettingsController.ACCOUNT;
+import static com.comtudy.settings.SettingsController.PASSWORD;
+import static com.comtudy.settings.SettingsController.PROFILE;
+import static com.comtudy.settings.SettingsController.ROOT;
+import static com.comtudy.settings.SettingsController.SETTINGS;
+import static com.comtudy.settings.SettingsController.TAGS;
+import static com.comtudy.settings.SettingsController.ZONES;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -27,8 +37,11 @@ import com.comtudy.account.AccountRepository;
 import com.comtudy.account.AccountService;
 import com.comtudy.domain.Account;
 import com.comtudy.domain.Tag;
+import com.comtudy.domain.Zone;
 import com.comtudy.settings.form.TagForm;
+import com.comtudy.settings.form.ZoneForm;
 import com.comtudy.tag.TagRepository;
+import com.comtudy.zone.ZoneRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Transactional
@@ -53,6 +66,11 @@ class SettingsControllerTest {
     
     @Autowired
     AccountService accountService;
+    
+    @Autowired
+    ZoneRepository zoneRepository;
+
+    private Zone testZone = Zone.builder().city("test").localNameOfCity("테스트시").province("테스트주").build();
 
 	// '@WithAccount'를 사용할 땐 '@withAccount'쪽에서 처리가 되므로
 	// '@BeforEach'를 사용할 필요가 없지만
@@ -68,7 +86,58 @@ class SettingsControllerTest {
 		// 에러가 있어 '@WithAccount'로 대체해서 사용할 땐
 		// 테스트 후 지워줬어야했다.
 		
-	@AfterEach void afterEach() { accountRepository.deleteAll(); }
+	@AfterEach void afterEach() {
+		accountRepository.deleteAll();zoneRepository.deleteAll();
+    }
+
+    @WithAccount("pulpury")
+    @DisplayName("계정의 지역 정보 수정 폼")
+    @Test
+    void updateZonesForm() throws Exception {
+        mockMvc.perform(get(ROOT + SETTINGS + ZONES))
+                .andExpect(view().name(SETTINGS + ZONES))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("whitelist"))
+                .andExpect(model().attributeExists("zones"));
+    }
+
+    @WithAccount("pulpury")
+    @DisplayName("계정의 지역 정보 추가")
+    @Test
+    void addZone() throws Exception {
+        ZoneForm zoneForm = new ZoneForm();
+        zoneForm.setZoneName(testZone.toString());
+
+        mockMvc.perform(post(ROOT + SETTINGS + ZONES + "/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(zoneForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        Account pulpury = accountRepository.findByNickname("pulpury");
+        Zone zone = zoneRepository.findByCityAndProvince(testZone.getCity(), testZone.getProvince());
+        assertTrue(pulpury.getZones().contains(zone));
+    }
+
+    @WithAccount("pulpury")
+    @DisplayName("계정의 지역 정보 추가")
+    @Test
+    void removeZone() throws Exception {
+        Account pulpury = accountRepository.findByNickname("pulpury");
+        Zone zone = zoneRepository.findByCityAndProvince(testZone.getCity(), testZone.getProvince());
+        accountService.addZone(pulpury, zone);
+
+        ZoneForm zoneForm = new ZoneForm();
+        zoneForm.setZoneName(testZone.toString());
+
+        mockMvc.perform(post(ROOT + SETTINGS + ZONES + "/remove")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(zoneForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        assertFalse(pulpury.getZones().contains(zone));
+    }
 	
 	@WithAccount("pulpury")
     @DisplayName("계정의 태그 수정 폼")
