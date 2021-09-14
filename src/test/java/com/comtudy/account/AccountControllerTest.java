@@ -26,6 +26,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.comtudy.domain.Account;
+import com.comtudy.mail.EmailMessage;
+import com.comtudy.mail.EmailService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,7 +44,7 @@ class AccountControllerTest {
 	private AccountRepository accountRepository;
 	
 	@MockBean
-	JavaMailSender javaMailSender;
+	EmailService emailService;
 	
 	
 	@DisplayName("회원 가입 화면 보이는지 테스트")
@@ -87,7 +89,7 @@ class AccountControllerTest {
 //		assertTrue(accountRepository.existsByEmail("taeju@email.com"));
 		assertNotEquals(account.getPassword(), "12345678");
 		assertNotNull(account.getEmailCheckToken());
-		then(javaMailSender).should().send(any(SimpleMailMessage.class));
+		then(emailService).should().sendEmail(any(EmailMessage.class));
 	}
 	
 	@DisplayName("인증 메일 확인 - 입력 값 오류")
