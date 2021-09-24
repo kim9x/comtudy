@@ -32,11 +32,12 @@ import com.comtudy.settings.form.NicknameForm;
 import com.comtudy.settings.form.Notifications;
 import com.comtudy.settings.form.PasswordForm;
 import com.comtudy.settings.form.Profile;
-import com.comtudy.settings.form.TagForm;
-import com.comtudy.settings.form.ZoneForm;
 import com.comtudy.settings.validator.NicknameValidator;
 import com.comtudy.settings.validator.PasswordFormValidator;
+import com.comtudy.tag.TagForm;
 import com.comtudy.tag.TagRepository;
+import com.comtudy.tag.TagService;
+import com.comtudy.zone.ZoneForm;
 import com.comtudy.zone.ZoneRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,6 +61,7 @@ public class SettingsController {
     private final AccountService accountService;
     private final ModelMapper modelMapper;
     private final NicknameValidator nicknameValidator;
+    private final TagService tagService;
     private final TagRepository tagRepository;
     private final ZoneRepository zoneRepository;
     private final ObjectMapper objectMapper;
@@ -151,14 +153,7 @@ public class SettingsController {
     @PostMapping(TAGS  + "/add")
     @ResponseBody
     public ResponseEntity addTag(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
-        String title = tagForm.getTagTitle();
-
-        Tag tag = tagRepository.findByTitle(title);
-        if (tag == null) {
-//            tag = tagRepository.save(Tag.builder().title(tagForm.getTagTitle()).build());
-            tag = tagRepository.save(Tag.builder().title(title).build());
-        }
-
+    	Tag tag = tagService.findOrCreateNew(tagForm.getTagTitle());
         accountService.addTag(account, tag);
         return ResponseEntity.ok().build();
     }

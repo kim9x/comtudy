@@ -1,4 +1,4 @@
-package com.comtudy.settings.form;
+package com.comtudy.zone;
 
 import com.comtudy.domain.Zone;
 

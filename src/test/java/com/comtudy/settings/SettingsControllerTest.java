@@ -38,9 +38,9 @@ import com.comtudy.account.AccountService;
 import com.comtudy.domain.Account;
 import com.comtudy.domain.Tag;
 import com.comtudy.domain.Zone;
-import com.comtudy.settings.form.TagForm;
-import com.comtudy.settings.form.ZoneForm;
+import com.comtudy.tag.TagForm;
 import com.comtudy.tag.TagRepository;
+import com.comtudy.zone.ZoneForm;
 import com.comtudy.zone.ZoneRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
