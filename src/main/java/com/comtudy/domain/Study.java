@@ -88,6 +88,21 @@ public class Study {
         this.managers.add(account);
     }
     
+    public boolean isJoinable(UserAccount userAccount) {
+        Account account = userAccount.getAccount();
+        return this.isPublished() && this.isRecruiting()
+                && !this.members.contains(account) && !this.managers.contains(account);
+
+    }
+
+    public boolean isMember(UserAccount userAccount) {
+        return this.members.contains(userAccount.getAccount());
+    }
+
+    public boolean isManager(UserAccount userAccount) {
+        return this.managers.contains(userAccount.getAccount());
+    }
+    
     public String getImage() {
         return image != null ? image : "/images/default_banner.png";
     }
@@ -132,18 +147,7 @@ public class Study {
         return this.published && this.recruitingUpdatedDateTime == null || this.recruitingUpdatedDateTime.isBefore(LocalDateTime.now().minusHours(1));
     }
     
-    public boolean isJoinable(UserAccount userAccount) {
-        Account account = userAccount.getAccount();
-        return this.isPublished() && this.isRecruiting()
-                && !this.members.contains(account) && !this.managers.contains(account);
-
-    }
-
-    public boolean isMember(UserAccount userAccount) {
-        return this.members.contains(userAccount.getAccount());
-    }
-
-    public boolean isManager(UserAccount userAccount) {
-        return this.managers.contains(userAccount.getAccount());
+    public boolean isRemovable() {
+        return !this.published; // TODO 모임을 했던 스터디는 삭제할 수 없다.
     }
 }
